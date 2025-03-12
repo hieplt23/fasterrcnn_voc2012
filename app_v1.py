@@ -202,24 +202,20 @@ def app():
                     st.error("Failed to capture frame from camera.")
                     break
 
-                # Xử lý frame với object detection
                 result_frame = detect_objects(frame, model, device, args.image_size, conf_threshold)
 
-                # Hiển thị FPS
                 frame_count += 1
                 elapsed_time = time.time() - start_time
-                if elapsed_time > 1.0:  # Cập nhật FPS mỗi giây
+                if elapsed_time > 1.0:
                     fps = frame_count / elapsed_time
                     cv2.putText(result_frame, f"FPS: {fps:.2f}", (10, 30),
                                 cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
                     frame_count = 0
                     start_time = time.time()
 
-                # Chuyển frame sang RGB để hiển thị trong Streamlit
                 result_frame_rgb = cv2.cvtColor(result_frame, cv2.COLOR_BGR2RGB)
                 video_frame.image(result_frame_rgb, caption="Real-Time Detection", use_container_width=True)
 
-                # Kiểm tra trạng thái checkbox
                 run_camera = st.session_state.run_camera
 
             cap.release()
